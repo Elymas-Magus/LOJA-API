@@ -1,5 +1,7 @@
-const URL_PRODS = `http://localhost/api/products/`;
-const URL_CITYS = `http://localhost/api/cidades/`;
+const URL = 'http://apiteste.mywebcommunity.org/';
+//const URl = 'http://localhost/';
+const URL_PRODS = `${URL}api/products/`;
+const URL_CITYS = `${URL}api/cidades/`;
 
 document.addEventListener("DOMContentLoaded", () => {
     render_prods ();
