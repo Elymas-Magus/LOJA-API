@@ -2,7 +2,8 @@
 
 namespace Api\Models\helper;
 
-if (!defined("URL")) {
+if (!defined("URL"))
+{
     header("Location: /");
     exit();
 }

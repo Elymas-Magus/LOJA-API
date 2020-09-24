@@ -31,28 +31,3 @@ INSERT INTO PRODUCTS VALUES
 (6, 'Camiseta', '30.00', 1000, 3, '0', '2020-09-16 07:59:51', NULL),
 (7, 'Caneta', '1.00', 1000, 1, '0', '2020-09-16 08:07:17', NULL),
 (8, 'Lapis', '1.00', 1000, 1, '0', '2020-09-16 08:11:04', NULL),
-
-
-CREATE TABLE ACCESS_LVL (
-  id int NOT NULL AUTO_INCREMENT,
-    nome varchar(100) NOT NULL,
-    descricao varchar(500) NOT NULL,
-    CONSTRAINT accesspk PRIMARY KEY(id)
-);
-
-CREATE TABLE USERS (
-  id int NOT NULL AUTO_INCREMENT,
-    name varchar(100) NOT NULL,
-    email varchar(200) NOT NULL,
-    pwd varchar(500) NOT NULL,
-    access_lvl int NOT NULL,
-    created datetime NOT NULL,
-    modified datetime,
-    CONSTRAINT userpk PRIMARY KEY(id),
-    CONSTRAINT userfk FOREIGN KEY(access_lvl) REFERENCES (id)
-    
-)
-
-
-INSERT INTO USERS VALUES
-(1, 'Pedro', 'pedro@email.com', '$2y$10$NxTl6IByvk0axUg1z9x3kuAZlc7DJjJFLYGzEoQM..Ad/R4rwGS1C', 1, '2020-09-16 07:52:41', NULL),

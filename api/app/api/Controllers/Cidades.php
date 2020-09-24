@@ -2,6 +2,12 @@
 
 namespace Api\Controllers;
 
+if (!defined("URL"))
+{
+    header("Location: /");
+    exit();
+}
+
 class Cidades
 {
     private $Dados;

@@ -2,6 +2,12 @@
 
 namespace Core;
 
+if (!defined("URL"))
+{
+    header("Location: /");
+    exit();
+}
+
 class ConfigController
 {
 	private $Url;
@@ -15,7 +21,7 @@ class ConfigController
     private $Response;
 
     public function __construct()
-    {
+    {        
         $url = filter_input(INPUT_GET, 'url', FILTER_DEFAULT);
         if ($url)
         {
@@ -44,6 +50,10 @@ class ConfigController
             if (isset($this->UrlConjunto[0]))
             {
                 $this->UrlController = $this->slugController($this->UrlConjunto[0]);
+                if ($this->UrlController === 'Auth' && strcasecmp($this->method, 'POST'))
+                {
+                    $this->UrlController = null;
+                }
             }
             else
             {
@@ -64,6 +74,23 @@ class ConfigController
             $this->UrlController = null;
             $this->UrlParametro = null;
         }
+    }
+
+    public function setUrlController($UrlController)
+    {
+        $this->UrlController = $this->slugController($UrlController);
+    }
+
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    public function checkLogged()
+    {
+        $logged = new \Api\Controllers\Auth();
+        $this->Response = $logged->checkAuth();
+        return $this->Response;
     }
 
     private function cleanUrl()
@@ -93,14 +120,16 @@ class ConfigController
 
     public function load()
     {
+        $this->Response = null;
         if ($this->UrlController === null || $this->method == null)
         {
-            $this->Response = array('status' => 'error', 'code' => 400, 'data' => 'funcionalidade inexistente');
-            $this->getResponse ();
-            return;
+            $this->Response = ['status' => 'error', 'code' => 400, 'data' => 'funcionalidade inexistente'];
+        }
+        else
+        {
+            $this->{$this->method}(); 
         }
 
-        $this->{$this->method}(); 
         $this->getResponse ();
     }
 
@@ -128,8 +157,18 @@ class ConfigController
 
     private function post()
     {
-        $estoque = new \Api\Controllers\Products();
-        $this->Response = $estoque->cadProduct(filter_input_array(INPUT_POST, FILTER_DEFAULT));
+        $input = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
+        if ($this->UrlController === "Products")
+        {
+            $estoque = new \Api\Controllers\Products();
+            $this->Response = $estoque->cadProduct($input);
+        }
+        elseif ($this->UrlController === "Auth")
+        {
+            $auth = new \Api\Controllers\Auth();
+            $this->Response = $auth->login ($input);
+        }
     }
 
     private function put()
